@@ -65,7 +65,7 @@ app.get('/api/persons/:id', (req, res, next) => {
       res.status(404).end()
     }
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
   // const id = Number(req.params.id)
   // const person = persons.find(person => person.id === id)
 
@@ -80,7 +80,7 @@ app.get('/api/persons/:id', (req, res, next) => {
 
 app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndDelete(req.params.id)
-    .then(result => {
+    .then(() => {
       res.status(204).end()
     })
     .catch(error => next(error))
@@ -91,9 +91,9 @@ app.delete('/api/persons/:id', (req, res, next) => {
   // res.status(204).end()
 })
 
-const generateId = () => {
-  return Math.floor(Math.random() * 100000)
-}
+// const generateId = () => {
+//   return Math.floor(Math.random() * 100000)
+// }
 
 app.post('/api/persons', (req, res, next) => {
   const body = req.body
@@ -103,7 +103,7 @@ app.post('/api/persons', (req, res, next) => {
       error: 'name missing'
     })
   }
-  
+
   if (!body.number) {
     return res.status(400).json({
       error: 'number missing'
@@ -115,11 +115,11 @@ app.post('/api/persons', (req, res, next) => {
     number: body.number,
     date: new Date(),
   })
-        
+
   person.save().then(savedPerson => {
     res.json(savedPerson)
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 
 })
 
@@ -141,9 +141,11 @@ app.put('/api/persons/:id', (req, res, next) => {
 })
 
 app.get('/info', (req, res) => {
-  res.send(
-    `<p>Phonebook has info for ${persons.length} people</p>
-    ${new Date()}`)
+  Person.find({}).then(persons => {
+    res.send(
+      `<p>Phonebook has info for ${persons.length} people</p>    
+      ${new Date()}`)
+  })
 })
 
 const unknownEndpoint = (request, response) => {
